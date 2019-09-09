@@ -31,14 +31,14 @@ void exporth()
 {
 	SDL_SysWMinfo sysinfo;
 	SDL_VERSION(&sysinfo.version);
-	SDL_GetWMInfo(&sysinfo);
+	SDL_GetWindowWMInfo(gWindow, &sysinfo);
 	OPENFILENAMEA ofn;
 	char szFileName[1024] = "";
 
 	ZeroMemory(&ofn, sizeof(ofn));
 
 	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = sysinfo.window;
+	ofn.hwndOwner = sysinfo.info.win.window;
 	ofn.lpstrFilter = "C++ .h\0*.h\0All files\0*.*\0\0";
 
 	ofn.nMaxFile = 1024;
@@ -59,14 +59,14 @@ void exportobj()
 {
 	SDL_SysWMinfo sysinfo;
 	SDL_VERSION(&sysinfo.version);
-	SDL_GetWMInfo(&sysinfo);
+    SDL_GetWindowWMInfo(gWindow, &sysinfo);
 	OPENFILENAMEA ofn;
 	char szFileName[1024] = "";
 
 	ZeroMemory(&ofn, sizeof(ofn));
 
 	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = sysinfo.window;
+	ofn.hwndOwner = sysinfo.info.win.window;
 	ofn.lpstrFilter = "LightWave .obj\0*.obj\0All files\0*.*\0\0";
 
 	ofn.nMaxFile = 1024;
@@ -87,14 +87,14 @@ int loadcustomtexture(int &aTexHandle, int aClamp)
 {
 	SDL_SysWMinfo sysinfo;
 	SDL_VERSION(&sysinfo.version);
-	SDL_GetWMInfo(&sysinfo);
+    SDL_GetWindowWMInfo(gWindow, &sysinfo);
 	OPENFILENAMEA ofn;
 	char szFileName[1024] = "";
 
 	ZeroMemory(&ofn, sizeof(ofn));
 
 	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = sysinfo.window;
+	ofn.hwndOwner = sysinfo.info.win.window;
 	ofn.lpstrFilter = "All image files\0*.JPG;*.PNG;*.TGA;*.bmp;*.PSD;*.GIF;*.HDR;*.PIC\0JPEG\0*.JPG\0PNG\0*.PNG\0TGA\0*.TGA\0BMP\0*.bmp\0PSD\0*.PSD\0GIF\0*.GIF\0HDR\0*.HDR\0PIC\0*.PIC\0All files\0*.*\0\0";
 
 	ofn.nMaxFile = 1024;
@@ -117,14 +117,14 @@ void loadproject()
 {
 	SDL_SysWMinfo sysinfo;
 	SDL_VERSION(&sysinfo.version);
-	SDL_GetWMInfo(&sysinfo);
+    SDL_GetWindowWMInfo(gWindow, &sysinfo);
 	OPENFILENAMEA ofn;
 	char szFileName[1024] = "";
 
 	ZeroMemory(&ofn, sizeof(ofn));
 
 	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = sysinfo.window;
+	ofn.hwndOwner = sysinfo.info.win.window;
 	ofn.lpstrFilter = "HappyTree project .HTR\0*.HTR\0All files\0*.*\0\0";
 
 	ofn.nMaxFile = 1024;
@@ -145,14 +145,14 @@ void saveproject()
 {
 	SDL_SysWMinfo sysinfo;
 	SDL_VERSION(&sysinfo.version);
-	SDL_GetWMInfo(&sysinfo);
+    SDL_GetWindowWMInfo(gWindow, &sysinfo);
 	OPENFILENAMEA ofn;
 	char szFileName[1024] = "";
 
 	ZeroMemory(&ofn, sizeof(ofn));
 
 	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = sysinfo.window;
+	ofn.hwndOwner = sysinfo.info.win.window;
 	ofn.lpstrFilter = "HappyTree project .htr\0*.HTR\0All files\0*.*\0\0";
 
 	ofn.nMaxFile = 1024;

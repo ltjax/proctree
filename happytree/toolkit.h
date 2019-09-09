@@ -124,8 +124,9 @@ enum keystates
 #endif
 
 extern int gScreenWidth, gScreenHeight;
+extern SDL_Window* gWindow;
 
-void initvideo(int argc);
+void initvideo(char const* title, int argc);
 
 GLuint load_texture(char * aFilename, int clamp = 1);
 void reload_textures();

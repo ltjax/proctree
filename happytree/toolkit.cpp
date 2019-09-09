@@ -10,27 +10,17 @@ struct texpair
 	unsigned char *mData;
 };
 
-int gScreenWidth = 0;
-int gScreenHeight = 0;
+SDL_Window* gWindow = nullptr;
+int gScreenWidth = DESIRED_WINDOW_WIDTH;
+int gScreenHeight = DESIRED_WINDOW_HEIGHT;
 UIState gUIState = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 texpair * gTextureStore = NULL;
 int gTextureStoreSize = 0;
 
 
-void initvideo(int argc)
+void initvideo(char const* title, int argc)
 {
-    const SDL_VideoInfo *info = NULL;
-    int bpp = 0;
     int flags = 0;
-
-    info = SDL_GetVideoInfo();
-
-    if (!info) 
-    {
-        fprintf(stderr, "Video query failed: %s\n", SDL_GetError());
-        SDL_Quit();
-        exit(0);
-    }
 
 #ifdef _DEBUG
     int fsflag = 0;
@@ -46,10 +36,7 @@ void initvideo(int argc)
 
     if (fsflag) 
     {
-        gScreenWidth = info->current_w;
-        gScreenHeight = info->current_h;
-        bpp = info->vfmt->BitsPerPixel;
-        flags = SDL_OPENGL | SDL_FULLSCREEN;
+        flags = SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP;
     }
     else
     {
@@ -57,30 +44,32 @@ void initvideo(int argc)
         {
             // window was resized
         }
-        else
-        {
-            gScreenWidth = DESIRED_WINDOW_WIDTH;
-            gScreenHeight = DESIRED_WINDOW_HEIGHT;
-        }
-        bpp = info->vfmt->BitsPerPixel;
-        flags = SDL_OPENGL;
+        flags = SDL_WINDOW_OPENGL;
 #ifdef RESIZABLE_WINDOW
-        flags |= SDL_RESIZABLE;
+        flags |= SDL_WINDOW_RESIZABLE;
 #endif
     }
 
-    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
-    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
-    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+    // request OpenGL 3.3 context.
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    if (SDL_SetVideoMode(gScreenWidth, gScreenHeight, bpp, flags) == 0) 
+    gWindow = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, gScreenWidth, gScreenHeight, flags);
+    if (gWindow == 0)
     {
         fprintf( stderr, "Video mode set failed: %s\n", SDL_GetError());
         SDL_Quit();
         exit(0);
     }
+
+    SDL_GL_CreateContext(gWindow);
    
     glViewport( 0, 0, gScreenWidth, gScreenHeight );
 

@@ -111,7 +111,7 @@ void progress()
 	glVertex2f(sin(f) * 0.1 + 0, cos(f) * 0.1 + 0); f += 3.14 * 4 / 3;
 	glVertex2f(sin(f) * 0.1 + 0, cos(f) * 0.11 + 0);
 	glEnd();
-	SDL_GL_SwapBuffers();
+	SDL_GL_SwapWindow(gWindow);
 	
 }
 
@@ -196,8 +196,9 @@ void process_events()
 			gUIState.keyentered = event.key.keysym.sym;
 			gUIState.keymod = event.key.keysym.mod;
 			// if key is ASCII, accept it as character input
-			if ((event.key.keysym.unicode & 0xFF80) == 0)
-				gUIState.keychar = event.key.keysym.unicode & 0x7f;
+            //TODO: renabled
+			//if ((event.key.keysym.unicode & 0xFF80) == 0)
+			//	gUIState.keychar = event.key.keysym.unicode & 0x7f;
 			break;
 		case SDL_KEYUP:
 			handle_key(event.key.keysym.sym, 0);
@@ -238,10 +239,10 @@ void process_events()
 			SDL_Quit();
 			exit(0);
 			break;
-		case SDL_VIDEORESIZE:
-			gScreenWidth = event.resize.w;
-			gScreenHeight = event.resize.h;				
-			initvideo(0);
+		case SDL_WINDOWEVENT_RESIZED:
+			gScreenWidth = event.window.data1;
+			gScreenHeight = event.window.data2;
+            glViewport(0, 0, gScreenWidth, gScreenHeight);
 			init_gl_resources();
 			break;
 		}
@@ -648,7 +649,7 @@ void draw_screen()
 	ImGui::Render();
 
     //SDL_Delay(10);
-	SDL_GL_SwapBuffers();
+	SDL_GL_SwapWindow(gWindow);
 }
 
 
@@ -782,11 +783,8 @@ int main(int argc, char** args)
         exit(0);
     }
 
-    initvideo(argc);
-
-	// set window title
-	SDL_WM_SetCaption(TITLE " - http://iki.fi/sol/", NULL);
-
+    initvideo(TITLE " - http://iki.fi/sol/", argc);
+    
 	progress();
 
 	InitImGui();
@@ -795,9 +793,10 @@ int main(int argc, char** args)
 	initGraphicsAssets();
 
 	// For imgui - Enable keyboard repeat to make sliders more tolerable
-	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+    //TODO: figure out what to do with this
+	//SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 	// For imgui - Enable keyboard UNICODE processing for the text field.
-	SDL_EnableUNICODE(1);
+	//SDL_EnableUNICODE(1);
 
    
 
