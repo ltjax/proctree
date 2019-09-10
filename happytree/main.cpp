@@ -589,7 +589,7 @@ void draw_screen()
 				zofs *= l;
 				glm::mat4 temp = mat_modelview;
 
-				glm::mat4 trans = glm::translate(glm::mat4(), glm::vec3(xofs, 0, zofs));
+				glm::mat4 trans = glm::translate(glm::mat4(1.f), glm::vec3(xofs, 0, zofs));
 				mat_modelview = mat_modelview * trans;
 				draw_tree(pass ? gBaseShader : gShadowpassShader);
 				mat_modelview = temp;
@@ -629,7 +629,7 @@ void draw_screen()
 					zofs *= l;
 					glm::mat4 temp = mat_modelview;
 
-					glm::mat4 trans = glm::translate(glm::mat4(), glm::vec3(xofs, 0, zofs));
+					glm::mat4 trans = glm::translate(glm::mat4(1.f), glm::vec3(xofs, 0, zofs));
 					mat_modelview = mat_modelview * trans;
 					draw_twig(pass ? gBaseShader : gShadowpassShader);
 					mat_modelview = temp;
