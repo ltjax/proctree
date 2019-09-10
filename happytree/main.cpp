@@ -151,43 +151,43 @@ int propertiesChanged()
 
 void handle_key(int keysym, int down)
 {
-    switch(keysym)
-    {
-    case SDLK_ESCAPE:
-        if (!down)
-        {
-            exit(0);
-        }
-        break;
-    case SDLK_UP:
-    case SDLK_w:
-        if (down) gKeyState |= KEY_UP; else gKeyState &= ~KEY_UP;
-        break;
-    case SDLK_DOWN:
-    case SDLK_s:
-        if (down) gKeyState |= KEY_DOWN; else gKeyState &= ~KEY_DOWN;
-        break;
-    case SDLK_LEFT:
-    case SDLK_a:
-        if (down) gKeyState |= KEY_LEFT; else gKeyState &= ~KEY_LEFT;
-        break;
-    case SDLK_RIGHT:
-    case SDLK_d:
-        if (down) gKeyState |= KEY_RIGHT; else gKeyState &= ~KEY_RIGHT;
-        break;
-    case SDLK_RCTRL:
-    case SDLK_LCTRL:
-        if (down) gKeyState |= KEY_FIRE;
-        break;
-    }
+	switch(keysym)
+	{
+	case SDLK_ESCAPE:
+		if (!down)
+		{
+			exit(0);
+		}
+		break;
+	case SDLK_UP:
+	case SDLK_w:
+		if (down) gKeyState |= KEY_UP; else gKeyState &= ~KEY_UP;
+		break;
+	case SDLK_DOWN:
+	case SDLK_s:
+		if (down) gKeyState |= KEY_DOWN; else gKeyState &= ~KEY_DOWN;
+		break;
+	case SDLK_LEFT:
+	case SDLK_a:
+		if (down) gKeyState |= KEY_LEFT; else gKeyState &= ~KEY_LEFT;
+		break;
+	case SDLK_RIGHT:
+	case SDLK_d:
+		if (down) gKeyState |= KEY_RIGHT; else gKeyState &= ~KEY_RIGHT;
+		break;
+	case SDLK_RCTRL:
+	case SDLK_LCTRL:
+		if (down) gKeyState |= KEY_FIRE;
+		break;
+	}
 }
 
 void process_events()
 {
-    SDL_Event event;
+	SDL_Event event;
 
-    while (SDL_PollEvent(&event)) 
-    {	
+	while (SDL_PollEvent(&event)) 
+	{	
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
@@ -196,7 +196,7 @@ void process_events()
 			gUIState.keyentered = event.key.keysym.sym;
 			gUIState.keymod = event.key.keysym.mod;
 			// if key is ASCII, accept it as character input
-            //TODO: renabled
+			//TODO: renabled
 			//if ((event.key.keysym.unicode & 0xFF80) == 0)
 			//	gUIState.keychar = event.key.keysym.unicode & 0x7f;
 			break;
@@ -239,14 +239,21 @@ void process_events()
 			SDL_Quit();
 			exit(0);
 			break;
-		case SDL_WINDOWEVENT_RESIZED:
-			gScreenWidth = event.window.data1;
-			gScreenHeight = event.window.data2;
-            glViewport(0, 0, gScreenWidth, gScreenHeight);
-			init_gl_resources();
+		case SDL_WINDOWEVENT:
+			switch (event.window.event)
+			{
+			case SDL_WINDOWEVENT_RESIZED:
+				gScreenWidth = event.window.data1;
+				gScreenHeight = event.window.data2;
+				glViewport(0, 0, gScreenWidth, gScreenHeight);
+				init_gl_resources();
+				break;
+			default:
+				break;
+			}
 			break;
 		}
-    }
+	}
 }
 
 
@@ -446,7 +453,7 @@ void draw_imgui()
 
 void draw_screen()
 {
-    int tick = SDL_GetTicks();
+	int tick = SDL_GetTicks();
 
 	lazyTextureLoad();
 
@@ -494,34 +501,34 @@ void draw_screen()
 		}
 	}
 
-    int i;    
+	int i;    
 
-    if (tick - gLastTick > TICK_TIMEWARP) 
-        gLastTick = tick;
+	if (tick - gLastTick > TICK_TIMEWARP) 
+		gLastTick = tick;
 
-    if (gLastTick >= tick)
-    {
-        SDL_Delay(1);
-        return;
-    }
+	if (gLastTick >= tick)
+	{
+		SDL_Delay(1);
+		return;
+	}
 
-    while (gLastTick < tick)
-    {
-        physics_tick(gLastTick);
+	while (gLastTick < tick)
+	{
+		physics_tick(gLastTick);
 
-        gLastTick += 1000 / PHYSICS_FPS;
-    }
+		gLastTick += 1000 / PHYSICS_FPS;
+	}
 
 	draw_imgui();
 
-    ////////////////////////////////////
-    // Rendering
-    ////////////////////////////////////
+	////////////////////////////////////
+	// Rendering
+	////////////////////////////////////
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    glClearColor(gSkyColor[0],gSkyColor[1],gSkyColor[2],1.0);
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	glClearColor(gSkyColor[0],gSkyColor[1],gSkyColor[2],1.0);
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 	if (gWireframeMode)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -648,7 +655,7 @@ void draw_screen()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	ImGui::Render();
 
-    //SDL_Delay(10);
+	//SDL_Delay(10);
 	SDL_GL_SwapWindow(gWindow);
 }
 
@@ -776,15 +783,15 @@ void initGraphicsAssets()
 
 int main(int argc, char** args)
 {
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE) < 0) 
-    {
-        fprintf(stderr, "Video initialization failed: %s\n", SDL_GetError());
-        SDL_Quit();
-        exit(0);
-    }
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE) < 0) 
+	{
+		fprintf(stderr, "Video initialization failed: %s\n", SDL_GetError());
+		SDL_Quit();
+		exit(0);
+	}
 
-    initvideo(TITLE " - http://iki.fi/sol/", argc);
-    
+	initvideo(TITLE " - http://iki.fi/sol/", argc);
+	
 	progress();
 
 	InitImGui();
@@ -793,7 +800,7 @@ int main(int argc, char** args)
 	initGraphicsAssets();
 
 	// For imgui - Enable keyboard repeat to make sliders more tolerable
-    //TODO: figure out what to do with this
+	//TODO: figure out what to do with this
 	//SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 	// For imgui - Enable keyboard UNICODE processing for the text field.
 	//SDL_EnableUNICODE(1);
@@ -801,12 +808,12 @@ int main(int argc, char** args)
    
 
 //	SDL_SetCursor(load_cursor("cursor_scissors.png",0,0));
-    
-    while (1) 
-    {
-        process_events();
-        draw_screen();
-    }
+	
+	while (1) 
+	{
+		process_events();
+		draw_screen();
+	}
 
-    return 0;
+	return 0;
 }
