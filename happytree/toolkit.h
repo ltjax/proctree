@@ -35,7 +35,7 @@
 #include <windows.h> // needed to get GL stuff to work
 #include <SDL.h>
 #include "stb_image.h"
-#include "glee.h"
+#include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #define stricmp _stricmp

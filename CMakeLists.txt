@@ -12,4 +12,3 @@ conan_basic_setup(TARGETS)
 find_package(OpenGL REQUIRED)
 add_subdirectory(proctree)
 add_subdirectory(happytree)
-

@@ -69,7 +69,16 @@ void initvideo(char const* title, int argc)
         exit(0);
     }
 
-    SDL_GL_CreateContext(gWindow);
+    auto context = SDL_GL_CreateContext(gWindow);
+
+    GLenum err = glewInit();
+    if (GLEW_OK != err)
+    {
+        /* Problem: glewInit failed, something is seriously wrong. */
+        fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+        SDL_Quit();
+        exit(0);
+    }
    
     glViewport( 0, 0, gScreenWidth, gScreenHeight );
 

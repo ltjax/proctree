@@ -2,8 +2,6 @@
 set(TARGET_NAME happytree)
 add_executable(${TARGET_NAME}
   diskio.cpp
-  GLee.c
-  GLee.h
   glstuff.cpp
   happytree.h
   imconfig.h
@@ -31,4 +29,5 @@ target_link_libraries(${TARGET_NAME}
   PUBLIC proctree
   PUBLIC CONAN_PKG::sdl2
   PUBLIC CONAN_PKG::glm
+  PUBLIC CONAN_PKG::glew
   PUBLIC ${OPENGL_LIBRARY})

@@ -136,7 +136,7 @@ void setup_shadow()
 
 	mat_proj = glm::ortho<float>(-d, d, -d, d, 10, 100);
 
-	mat_modelview = glm::mat4();
+	mat_modelview = glm::mat4(1.f);
 	int tick = 0;
 	mat_modelview *= glm::lookAt(
 		gLightDir * 20.0f,
@@ -184,7 +184,7 @@ void setup_rendering(int tick)
 
 	mat_proj = glm::perspective((float)M_PI * 60.0f / 360.0f, gScreenWidth / (float)gScreenHeight, 1.0f, 1000.0f);
 
-	mat_modelview = glm::mat4();
+	mat_modelview = glm::mat4(1.f);
 
 	float d = gCamRotate.z + gForestMode * 20;
 	glm::vec3 at = { cos(gCamRotate.x), sin(gCamRotate.y), sin(gCamRotate.x) };
@@ -201,9 +201,7 @@ void draw_floor(Shader &shader)
 {
 	GLuint matrixpos = shader.uniformLocation("RotationMatrix");
 
-	glm::mat4 mat;
-
-	mat = mat_proj * mat_modelview;
+	glm::mat4 mat  = mat_proj * mat_modelview;
 
 	glUniformMatrix4fv(matrixpos, 1, GL_FALSE, &mat[0][0]);
 
@@ -267,9 +265,7 @@ void draw_tree(Shader &shader)
 {
 	GLuint matrixpos = shader.uniformLocation("RotationMatrix");
 
-	glm::mat4 mat;
-
-	mat = mat_proj * mat_modelview;
+	glm::mat4 mat = mat_proj * mat_modelview;
 
 	glUniformMatrix4fv(matrixpos, 1, GL_FALSE, &mat[0][0]);
 
@@ -305,9 +301,7 @@ void draw_twig(Shader &shader)
 {
 	GLuint matrixpos = shader.uniformLocation("RotationMatrix");
 
-	glm::mat4 mat;
-
-	mat = mat_proj * mat_modelview;
+	glm::mat4 mat = mat_proj * mat_modelview;
 
 	glUniformMatrix4fv(matrixpos, 1, GL_FALSE, &mat[0][0]);
 
