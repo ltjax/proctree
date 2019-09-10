@@ -1,6 +1,6 @@
 
 set(TARGET_NAME happytree)
-add_executable(${TARGET_NAME}
+add_executable(${TARGET_NAME} WIN32
   diskio.cpp
   glstuff.cpp
   happytree.h
