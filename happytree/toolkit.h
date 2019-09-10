@@ -6,9 +6,9 @@
 //// 
 
 // For windowed mode
-#define DESIRED_WINDOW_WIDTH (1920/2)
+#define DESIRED_WINDOW_WIDTH (1280)
 // For windowed mode
-#define DESIRED_WINDOW_HEIGHT (1080/2)
+#define DESIRED_WINDOW_HEIGHT (800)
 
 //#define FULLSCREEN_BY_DEFAULT
 
