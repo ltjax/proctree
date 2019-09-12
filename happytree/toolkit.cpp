@@ -120,7 +120,7 @@ static unsigned char * do_loadtexture(const char * aFilename, int &aWidth, int &
 
 char * mystrdup(const char *aString)
 {
-	int len = strlen(aString);
+	auto len = strlen(aString);
 	char * d = new char[len+1];
 	memcpy(d, aString, len);
 	d[len] = 0;

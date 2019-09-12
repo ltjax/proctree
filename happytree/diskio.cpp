@@ -26,91 +26,44 @@
 */
 
 #include "happytree.h"
+#include <nfd/nfd.hpp>
+#include <vector>
 
 void exporth()
 {
-	SDL_SysWMinfo sysinfo;
-	SDL_VERSION(&sysinfo.version);
-	SDL_GetWindowWMInfo(gWindow, &sysinfo);
-	OPENFILENAMEA ofn;
-	char szFileName[1024] = "";
+    std::vector<nfdfilteritem_t> filters = { { "Header File", "h,hpp" } };
 
-	ZeroMemory(&ofn, sizeof(ofn));
+    NFD::UniquePath path;
+    auto result = NFD::SaveDialog(path, filters.data(), filters.size());
+    if (result != NFD_OKAY)
+        return;
 
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = sysinfo.info.win.window;
-	ofn.lpstrFilter = "C++ .h\0*.h\0All files\0*.*\0\0";
-
-	ofn.nMaxFile = 1024;
-
-	ofn.Flags = OFN_EXPLORER;
-	char temp[1024]; temp[0] = 0;
-	ofn.lpstrFile = temp;
-	ofn.lpstrDefExt = "h";
-	ofn.lpstrTitle = "C++ .h";
-
-	if (GetSaveFileNameA(&ofn))
-	{
-		export_h(temp);
-	}
+	export_h(path.get());
 }
 
 void exportobj()
 {
-	SDL_SysWMinfo sysinfo;
-	SDL_VERSION(&sysinfo.version);
-    SDL_GetWindowWMInfo(gWindow, &sysinfo);
-	OPENFILENAMEA ofn;
-	char szFileName[1024] = "";
+    std::vector<nfdfilteritem_t> filters = { { "LightWave .obj", "obj" } };
 
-	ZeroMemory(&ofn, sizeof(ofn));
+    NFD::UniquePath path;
+    auto result = NFD::SaveDialog(path, filters.data(), filters.size());
+    if (result != NFD_OKAY)
+        return;
 
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = sysinfo.info.win.window;
-	ofn.lpstrFilter = "LightWave .obj\0*.obj\0All files\0*.*\0\0";
-
-	ofn.nMaxFile = 1024;
-
-	ofn.Flags = OFN_EXPLORER;
-	char temp[1024]; temp[0] = 0;
-	ofn.lpstrFile = temp;
-	ofn.lpstrDefExt = "obj";
-	ofn.lpstrTitle = "LightWave .obj";
-
-	if (GetSaveFileNameA(&ofn))
-	{
-		export_obj(temp);
-	}
+    export_obj(path.get());
 }
 
 int loadcustomtexture(int &aTexHandle, int aClamp)
 {
-	SDL_SysWMinfo sysinfo;
-	SDL_VERSION(&sysinfo.version);
-    SDL_GetWindowWMInfo(gWindow, &sysinfo);
-	OPENFILENAMEA ofn;
-	char szFileName[1024] = "";
+    std::vector<nfdfilteritem_t> filters = { { "Image files", "jpg,png,tga,bmp,psd,gif,hdr,pic" } };
 
-	ZeroMemory(&ofn, sizeof(ofn));
+    NFD::UniquePath path;
+    auto result = NFD::OpenDialog(path, filters.data(), filters.size());
+    if (result != NFD_OKAY)
+        return 0;
 
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = sysinfo.info.win.window;
-	ofn.lpstrFilter = "All image files\0*.JPG;*.PNG;*.TGA;*.bmp;*.PSD;*.GIF;*.HDR;*.PIC\0JPEG\0*.JPG\0PNG\0*.PNG\0TGA\0*.TGA\0BMP\0*.bmp\0PSD\0*.PSD\0GIF\0*.GIF\0HDR\0*.HDR\0PIC\0*.PIC\0All files\0*.*\0\0";
-
-	ofn.nMaxFile = 1024;
-
-	ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST;
-	char temp[1024]; temp[0] = 0;
-	ofn.lpstrFile = temp;
-	ofn.lpstrDefExt = "png";
-	ofn.lpstrTitle = "Texture file";
-
-	if (GetOpenFileNameA(&ofn))
-	{
-		aTexHandle = load_texture(temp, aClamp);
-		return 1;
-	}
-	return 0;
+	aTexHandle = load_texture(path.get(), aClamp);
+	return 1;
 }
 
 void loadproject()

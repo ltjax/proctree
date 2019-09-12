@@ -25,6 +25,7 @@
 *
 */
 #include "happytree.h"
+#include <nfd/nfd.hpp>
 
 char *gTwigTextureName[MAXTEXTURES];
 int gTwigTexture[MAXTEXTURES];
@@ -789,6 +790,9 @@ int main(int argc, char** args)
 		SDL_Quit();
 		exit(0);
 	}
+
+    // initialize NFD
+    NFD::Guard nfdGuard;
 
 	initvideo(TITLE " - http://iki.fi/sol/", argc);
 	
