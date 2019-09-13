@@ -118,7 +118,7 @@ extern SDL_Window* gWindow;
 
 void initvideo(char const* title, int argc);
 
-GLuint load_texture(char * aFilename, int clamp = 1);
+GLuint load_texture(char const* aFilename, int clamp = 1);
 void reload_textures();
 
 

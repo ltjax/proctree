@@ -127,7 +127,7 @@ char * mystrdup(const char *aString)
 	return d;
 }
 
-GLuint load_texture(char * aFilename, int clamp)
+GLuint load_texture(char const* aFilename, int clamp)
 {
     // First check if we have loaded this texture already
 	int i, j, w, h, n;

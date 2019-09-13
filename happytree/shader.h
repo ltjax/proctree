@@ -36,8 +36,8 @@ public:
 
 	Shader();
 	~Shader();
-	void init(char *aFilename_vs, char *aFilename_fs);
+	void init(char const* aFilename_vs, char const* aFilename_fs);
 	void build();
 	void use();
-	int uniformLocation(char *aName);
+	int uniformLocation(char const* aName);
 };

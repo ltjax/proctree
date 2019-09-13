@@ -40,7 +40,7 @@ Shader::~Shader()
 	delete[] mVSSrc;
 }
 
-void Shader::init(char *aFilename_vs, char *aFilename_fs)
+void Shader::init(char const* aFilename_vs, char const* aFilename_fs)
 {
 	delete[] mVSSrc;
 	delete[] mFSSrc;
@@ -80,7 +80,7 @@ void Shader::use()
 	glUseProgram(mShaderHandle);
 }
 
-int Shader::uniformLocation(char *aName)
+int Shader::uniformLocation(char const* aName)
 {
 	return glGetUniformLocation(mShaderHandle, aName);
 }

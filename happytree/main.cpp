@@ -401,7 +401,7 @@ void draw_imgui()
 		int i;
 		for (i = 0; i < 8; i++)
 		{
-			ImGui::Image((ImTextureID)tex_preset[i], previewsize);
+			ImGui::Image(reinterpret_cast<ImTextureID>(tex_preset[i]), previewsize);
 			char temp[80];
 			sprintf(temp, "Load preset %d", i + 1);
 			if (ImGui::Button(temp))
@@ -421,7 +421,7 @@ void draw_imgui()
 		int i;
 		for (i = 0; i < gTwigTextureCount; i++)
 		{
-			ImGui::Image((ImTextureID)gTwigTexture[i], previewsize);
+			ImGui::Image(reinterpret_cast<ImTextureID>(gTwigTexture[i]), previewsize);
 			if (ImGui::Button(gTwigTextureName[i]))
 			{
 				gTwigTextureIndex = i;
@@ -440,7 +440,7 @@ void draw_imgui()
 		int i;
 		for (i = 0; i < gTrunkTextureCount; i++)
 		{
-			ImGui::Image((ImTextureID)gTrunkTexture[i], previewsize);
+			ImGui::Image(reinterpret_cast<ImTextureID>(gTrunkTexture[i]), previewsize);
 			if (ImGui::Button(gTrunkTextureName[i]))
 			{
 				gTrunkTextureIndex = i;
@@ -710,13 +710,16 @@ int imageExists(char const* aBaseFilename, int aTwig)
 	return 0;
 }
 
-void findtextures(char *aBaseDir, int aTwig)
+void findtextures(boost::filesystem::path baseDir, int aTwig)
 {
-  for (auto const& entry : boost::filesystem::directory_iterator(aBaseDir))
+  if (!exists(baseDir))
+    return;
+
+  for (auto const& entry : boost::filesystem::directory_iterator(baseDir))
   {
     if (entry.status().type() == boost::filesystem::directory_file)
     {
-      imageExists((aBaseDir/entry.path()/"diffuse").string().c_str(), aTwig);
+      imageExists((baseDir/entry.path()/"diffuse").string().c_str(), aTwig);
     }
   }
 }
@@ -747,8 +750,8 @@ void initGraphicsAssets()
 	progress();
 	tex_preset[7] = load_texture("data/preset8.jpg");
 
-	findtextures("data\\twig", 1);
-	findtextures("data\\trunk", 0);
+	findtextures("data/twig", 1);
+	findtextures("data/trunk", 0);
 
 	// keep shader sources in memory in case we need to re-build them on resize
 	gBaseShader.init("data/base.vs", "data/base.fs");

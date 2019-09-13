@@ -262,7 +262,7 @@ void save_htr(char *aFilename)
 	fclose(f);
 }
 
-char * loadfile(char *aFilename, int &aLen)
+char * loadfile(char const* aFilename, int &aLen)
 {
 	// There's some bit of code that every programmer finds themselves rewriting over
 	// and over and over and OVER again. For myself, it's this. I've written this function
