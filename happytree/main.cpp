@@ -674,7 +674,7 @@ char * mystrdup(char * src, int ofs)
 int imageExists(char *aBaseFilename, int aTwig)
 {
 	
-	char *ext[] = { "TGA", "PNG", "JPG", "JPEG", "BMP", "PSD", "GIF", "HDR", "PIC", "PPM", "PGM"};
+	char const *ext[] = { "TGA", "PNG", "JPG", "JPEG", "BMP", "PSD", "GIF", "HDR", "PIC", "PPM", "PGM"};
 	char temp[2048];
 	int i;
 	for (i = 0; i < sizeof(ext)/sizeof(char*); i++)
@@ -711,6 +711,8 @@ int imageExists(char *aBaseFilename, int aTwig)
 
 void findtextures(char *aBaseDir, int aTwig)
 {
+  // TODO:
+#if 0
 	WIN32_FIND_DATAA fdFile;
 	HANDLE h = NULL;
 
@@ -737,7 +739,7 @@ void findtextures(char *aBaseDir, int aTwig)
 	while (FindNextFileA(h, &fdFile)); 
 
 	FindClose(h);
-
+#endif
 }
 
 

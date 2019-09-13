@@ -31,34 +31,24 @@
 #endif
 
 
-#ifdef WINDOWS_VERSION
-#include <windows.h> // needed to get GL stuff to work
 #include <SDL.h>
 #include "stb_image.h"
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+
+#ifdef WINDOWS_VERSION
 #define stricmp _stricmp
 #define strdup _strdup
 #endif
 
 
 #ifdef OSX_VERSION
-#include <SDL/SDL.h>
-#include "stb_image.h"
-#include "GLee.h"
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
 #define stricmp(a,b) strcasecmp((a),(b))
 #endif
 
 
 #ifdef LINUX_VERSION
-#include <SDL/SDL.h>
-#include "stb_image.h"
-#include "GLee.h"
-#include <GL/gl.h>
-#include <GL/glu.h>
 #define stricmp(a,b) strcasecmp((a),(b))
 #endif
 

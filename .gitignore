@@ -2,6 +2,9 @@
 /out/
 /.vs/
 
+# CLion Stuff
+/cmake-build-debug/
+
 # Data stuff
 /happytree/data/trunk/
 /happytree/data/twig/

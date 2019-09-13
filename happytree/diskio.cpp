@@ -202,7 +202,8 @@ void load_htr(char *aFilename)
 	if (sig != 0x00525448)
 	{
 		fclose(f);
-		MessageBoxA(NULL, "Error loading file: signature not recognized.", "Error loading file", MB_ICONERROR);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error loading file",
+		        "Error loading file: signature not recognized.", gWindow);
 		return;
 	}
 	fread(&gTree.mProperties.mClumpMax, 1, sizeof(float), f);

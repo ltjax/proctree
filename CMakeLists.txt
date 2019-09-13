@@ -9,6 +9,7 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
 # Own modules
-find_package(OpenGL REQUIRED)
+find_package(OpenGL COMPONENTS OpenGL REQUIRED)
+
 add_subdirectory(proctree)
 add_subdirectory(happytree)
