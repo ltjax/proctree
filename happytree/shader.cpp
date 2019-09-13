@@ -52,20 +52,36 @@ void Shader::build()
 {
 	char *vs_src_p[1] = { mVSSrc };
 	char *fs_src_p[1] = { mFSSrc };
+	int status = GL_FALSE;
 
 	int vs_obj = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vs_obj, 1, (const char**)vs_src_p, &mVSLen);
 	glCompileShader(vs_obj);
+  glGetShaderiv(vs_obj, GL_COMPILE_STATUS, &status);
+	if (status == GL_FALSE)
+	{
+		char temp[2048];
+		glGetShaderInfoLog(mShaderHandle, 2048, &status, temp);
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Shader compile failure", temp, gWindow);
+	}
 
+  status = GL_FALSE;
 	int fs_obj = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fs_obj, 1, (const char**)fs_src_p, &mFSLen);
 	glCompileShader(fs_obj);
+	glGetShaderiv(fs_obj, GL_COMPILE_STATUS, &status);
+	if (status == GL_FALSE)
+	{
+		char temp[2048];
+		glGetShaderInfoLog(mShaderHandle, 2048, &status, temp);
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Shader compile failure", temp, gWindow);
+	}
 
+	status = GL_FALSE;
 	mShaderHandle = glCreateProgram();
 	glAttachShader(mShaderHandle, vs_obj);
 	glAttachShader(mShaderHandle, fs_obj);
 	glLinkProgram(mShaderHandle);
-	int status;
 	glGetProgramiv(mShaderHandle, GL_LINK_STATUS, &status);
 	if (status == GL_FALSE)
 	{

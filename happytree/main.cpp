@@ -54,6 +54,7 @@ glm::mat4 mat_shadow;
 
 glm::vec3 gCamRotate = { 0, 0.2, 20 };
 
+GLuint gVAO = 0;
 GLuint gVertVBO = 0;
 GLuint gNormalVBO = 0;
 GLuint gUVVBO = 0;
@@ -108,11 +109,11 @@ void progress()
 	glClearColor(0, 0, 0, 1);
 	glColor3f(1, 1, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
-	glBegin(GL_TRIANGLES);
+	/*glBegin(GL_TRIANGLES);
 	glVertex2f(sin(f) * 0.1 + 0, cos(f) * 0.1 + 0); f += 3.14 * 4 / 3;
 	glVertex2f(sin(f) * 0.1 + 0, cos(f) * 0.1 + 0); f += 3.14 * 4 / 3;
 	glVertex2f(sin(f) * 0.1 + 0, cos(f) * 0.11 + 0);
-	glEnd();
+	glEnd();*/
 	SDL_GL_SwapWindow(gWindow);
 	
 }

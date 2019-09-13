@@ -57,6 +57,7 @@ extern int gTrunkTextureIndex;
 extern int tex_twig, tex_trunk, tex_floor;
 extern int tex_preset[8];
 
+extern GLuint gVAO;
 extern GLuint gVertVBO;
 extern GLuint gNormalVBO;
 extern GLuint gUVVBO;
