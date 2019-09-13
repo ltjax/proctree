@@ -71,8 +71,8 @@ void init_gl_resources()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	// create a framebuffer object for shadows
-	glGenFramebuffersEXT(1, &rb_shadowfbo);
-	glBindFramebufferEXT(GL_FRAMEBUFFER, rb_shadowfbo);
+	glGenFramebuffers(1, &rb_shadowfbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, rb_shadowfbo);
 
 	if (!rb_shadow)
 		glGenTextures(1, &rb_shadow);

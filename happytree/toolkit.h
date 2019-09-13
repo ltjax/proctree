@@ -34,8 +34,6 @@
 #include <SDL.h>
 #include "stb_image.h"
 #include <GL/glew.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 
 #ifdef WINDOWS_VERSION
 #define stricmp _stricmp
