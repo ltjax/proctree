@@ -3,6 +3,7 @@ sdl2/2.0.10@bincrafters/stable
 glm/0.9.9.5@g-truc/stable
 glew/2.1.0@bincrafters/stable
 nativefiledialog-extended/1.0@None/None
+boost_filesystem/1.69.0@bincrafters/stable
 
 [options]
 

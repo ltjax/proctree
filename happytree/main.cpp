@@ -26,6 +26,7 @@
 */
 #include "happytree.h"
 #include <nfd/nfd.hpp>
+#include <boost/filesystem.hpp>
 
 char *gTwigTextureName[MAXTEXTURES];
 int gTwigTexture[MAXTEXTURES];
@@ -671,7 +672,7 @@ char * mystrdup(char * src, int ofs)
 }
 
 
-int imageExists(char *aBaseFilename, int aTwig)
+int imageExists(char const* aBaseFilename, int aTwig)
 {
 	
 	char const *ext[] = { "TGA", "PNG", "JPG", "JPEG", "BMP", "PSD", "GIF", "HDR", "PIC", "PPM", "PGM"};
@@ -711,35 +712,13 @@ int imageExists(char *aBaseFilename, int aTwig)
 
 void findtextures(char *aBaseDir, int aTwig)
 {
-  // TODO:
-#if 0
-	WIN32_FIND_DATAA fdFile;
-	HANDLE h = NULL;
-
-	char path[2048];
-	sprintf(path, "%s\\*.*", aBaseDir);
-
-	h = FindFirstFileA(path, &fdFile);
-
-	if (h == INVALID_HANDLE_VALUE)
-		return;
-
-	do
-	{
-		if (strcmp(fdFile.cFileName, ".") != 0 &&
-			strcmp(fdFile.cFileName, "..") != 0)
-		{
-			if (fdFile.dwFileAttributes &FILE_ATTRIBUTE_DIRECTORY)
-			{				
-				sprintf(path, "%s\\%s\\diffuse", aBaseDir, fdFile.cFileName);
-				imageExists(path, aTwig);
-			}
-		}
-	} 
-	while (FindNextFileA(h, &fdFile)); 
-
-	FindClose(h);
-#endif
+  for (auto const& entry : boost::filesystem::directory_iterator(aBaseDir))
+  {
+    if (entry.status().type() == boost::filesystem::directory_file)
+    {
+      imageExists((aBaseDir/entry.path()/"diffuse").string().c_str(), aTwig);
+    }
+  }
 }
 
 
