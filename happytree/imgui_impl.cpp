@@ -134,7 +134,7 @@ static void LoadFontsTexture()
 	GLuint tex_id;
 	if (io.Fonts->TexID)
 	{
-		tex_id = (int)io.Fonts->TexID;
+		tex_id = *reinterpret_cast<int const*>(&io.Fonts->TexID);
 	}
 	else
 	{

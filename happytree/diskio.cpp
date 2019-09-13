@@ -26,147 +26,68 @@
 */
 
 #include "happytree.h"
+#include <nfd/nfd.hpp>
+#include <vector>
 
 void exporth()
 {
-	SDL_SysWMinfo sysinfo;
-	SDL_VERSION(&sysinfo.version);
-	SDL_GetWindowWMInfo(gWindow, &sysinfo);
-	OPENFILENAMEA ofn;
-	char szFileName[1024] = "";
+    std::vector<nfdfilteritem_t> filters = { { "Header File", "h,hpp" } };
 
-	ZeroMemory(&ofn, sizeof(ofn));
+    NFD::UniquePath path;
+    auto result = NFD::SaveDialog(path, filters.data(), filters.size());
+    if (result != NFD_OKAY)
+        return;
 
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = sysinfo.info.win.window;
-	ofn.lpstrFilter = "C++ .h\0*.h\0All files\0*.*\0\0";
-
-	ofn.nMaxFile = 1024;
-
-	ofn.Flags = OFN_EXPLORER;
-	char temp[1024]; temp[0] = 0;
-	ofn.lpstrFile = temp;
-	ofn.lpstrDefExt = "h";
-	ofn.lpstrTitle = "C++ .h";
-
-	if (GetSaveFileNameA(&ofn))
-	{
-		export_h(temp);
-	}
+	export_h(path.get());
 }
 
 void exportobj()
 {
-	SDL_SysWMinfo sysinfo;
-	SDL_VERSION(&sysinfo.version);
-    SDL_GetWindowWMInfo(gWindow, &sysinfo);
-	OPENFILENAMEA ofn;
-	char szFileName[1024] = "";
+    std::vector<nfdfilteritem_t> filters = { { "LightWave .obj", "obj" } };
 
-	ZeroMemory(&ofn, sizeof(ofn));
+    NFD::UniquePath path;
+    auto result = NFD::SaveDialog(path, filters.data(), filters.size());
+    if (result != NFD_OKAY)
+        return;
 
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = sysinfo.info.win.window;
-	ofn.lpstrFilter = "LightWave .obj\0*.obj\0All files\0*.*\0\0";
-
-	ofn.nMaxFile = 1024;
-
-	ofn.Flags = OFN_EXPLORER;
-	char temp[1024]; temp[0] = 0;
-	ofn.lpstrFile = temp;
-	ofn.lpstrDefExt = "obj";
-	ofn.lpstrTitle = "LightWave .obj";
-
-	if (GetSaveFileNameA(&ofn))
-	{
-		export_obj(temp);
-	}
+    export_obj(path.get());
 }
 
 int loadcustomtexture(int &aTexHandle, int aClamp)
 {
-	SDL_SysWMinfo sysinfo;
-	SDL_VERSION(&sysinfo.version);
-    SDL_GetWindowWMInfo(gWindow, &sysinfo);
-	OPENFILENAMEA ofn;
-	char szFileName[1024] = "";
+    std::vector<nfdfilteritem_t> filters = { { "Image files", "jpg,png,tga,bmp,psd,gif,hdr,pic" } };
 
-	ZeroMemory(&ofn, sizeof(ofn));
+    NFD::UniquePath path;
+    auto result = NFD::OpenDialog(path, filters.data(), filters.size());
+    if (result != NFD_OKAY)
+        return 0;
 
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = sysinfo.info.win.window;
-	ofn.lpstrFilter = "All image files\0*.JPG;*.PNG;*.TGA;*.bmp;*.PSD;*.GIF;*.HDR;*.PIC\0JPEG\0*.JPG\0PNG\0*.PNG\0TGA\0*.TGA\0BMP\0*.bmp\0PSD\0*.PSD\0GIF\0*.GIF\0HDR\0*.HDR\0PIC\0*.PIC\0All files\0*.*\0\0";
-
-	ofn.nMaxFile = 1024;
-
-	ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST;
-	char temp[1024]; temp[0] = 0;
-	ofn.lpstrFile = temp;
-	ofn.lpstrDefExt = "png";
-	ofn.lpstrTitle = "Texture file";
-
-	if (GetOpenFileNameA(&ofn))
-	{
-		aTexHandle = load_texture(temp, aClamp);
-		return 1;
-	}
-	return 0;
+	aTexHandle = load_texture(path.get(), aClamp);
+	return 1;
 }
 
 void loadproject()
 {
-	SDL_SysWMinfo sysinfo;
-	SDL_VERSION(&sysinfo.version);
-    SDL_GetWindowWMInfo(gWindow, &sysinfo);
-	OPENFILENAMEA ofn;
-	char szFileName[1024] = "";
+    std::vector<nfdfilteritem_t> filters = { { "HappyTree project", "htr" } };
 
-	ZeroMemory(&ofn, sizeof(ofn));
+    NFD::UniquePath path;
+    auto result = NFD::OpenDialog(path, filters.data(), filters.size());
+    if (result != NFD_OKAY)
+        return;
 
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = sysinfo.info.win.window;
-	ofn.lpstrFilter = "HappyTree project .HTR\0*.HTR\0All files\0*.*\0\0";
-
-	ofn.nMaxFile = 1024;
-
-	ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST;
-	char temp[1024]; temp[0] = 0;
-	ofn.lpstrFile = temp;
-	ofn.lpstrDefExt = "htr";
-	ofn.lpstrTitle = "HappyTree project .HTR";
-
-	if (GetOpenFileNameA(&ofn))
-	{
-		load_htr(temp);
-	}
+    load_htr(path.get());	
 }
 
 void saveproject()
 {
-	SDL_SysWMinfo sysinfo;
-	SDL_VERSION(&sysinfo.version);
-    SDL_GetWindowWMInfo(gWindow, &sysinfo);
-	OPENFILENAMEA ofn;
-	char szFileName[1024] = "";
+    std::vector<nfdfilteritem_t> filters = { { "HappyTree project", "htr" } };
 
-	ZeroMemory(&ofn, sizeof(ofn));
+    NFD::UniquePath path;
+    auto result = NFD::SaveDialog(path, filters.data(), filters.size());
+    if (result != NFD_OKAY)
+        return;
 
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = sysinfo.info.win.window;
-	ofn.lpstrFilter = "HappyTree project .htr\0*.HTR\0All files\0*.*\0\0";
-
-	ofn.nMaxFile = 1024;
-
-	ofn.Flags = OFN_EXPLORER;
-	char temp[1024]; temp[0] = 0;
-	ofn.lpstrFile = temp;
-	ofn.lpstrDefExt = "HTR";
-	ofn.lpstrTitle = "HappyTree project .HTR";
-
-	if (GetSaveFileNameA(&ofn))
-	{
-		save_htr(temp);
-	}
+	save_htr(path.get());	
 }
 
 void export_obj(char *aFilename)
@@ -281,7 +202,8 @@ void load_htr(char *aFilename)
 	if (sig != 0x00525448)
 	{
 		fclose(f);
-		MessageBoxA(NULL, "Error loading file: signature not recognized.", "Error loading file", MB_ICONERROR);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error loading file",
+		        "Error loading file: signature not recognized.", gWindow);
 		return;
 	}
 	fread(&gTree.mProperties.mClumpMax, 1, sizeof(float), f);
@@ -340,7 +262,7 @@ void save_htr(char *aFilename)
 	fclose(f);
 }
 
-char * loadfile(char *aFilename, int &aLen)
+char * loadfile(char const* aFilename, int &aLen)
 {
 	// There's some bit of code that every programmer finds themselves rewriting over
 	// and over and over and OVER again. For myself, it's this. I've written this function

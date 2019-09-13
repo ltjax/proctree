@@ -7,6 +7,31 @@ This is a liberally licensed procedural tree generator in c++, along with an edi
 The procedural generation itself is a port from https://github.com/supereggbert/proctree.js/
 see http://snappytree.com for an online demonstration of the original proctree.js (with webgl). The c++ port is several orders of magnitude faster than the original, and also fixes the UV mapping.
 
+# Fork Info
+
+This fork of proctree and happytree works nicely on Windows, Linux and Mac OS. It replaces a few dependencies:
+  - SDL2 instead of SDL
+  - nativefiledialog-extended instead of Win32 FileDialogs
+  - Boost.Filesystem instead of Win32 Directory iteration
+  - glew instead of GLee
+
+## Building
+The new fork uses conan for dependency management and CMake as a build system generator. E.g. to build on linux
+```
+# First add the required remotes (only do this once)
+conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+conan remote add ltjax https://api.bintray.com/conan/ltjax/conan 
+
+# Create a build folder and grab dependencies and generate build files
+mkdir build && cd build
+conan install .. -s build_type=Release -s compiler.libcxx=libstd++11 --build missing
+cmake .. -DCMAKE_BUILD_TYPE=Release
+
+# Now build
+make
+```
+**Warning:** Be sure to run happytree in the `happytree/` folder so it can find its `data/` folder. It will fail silently if you do not.
+
 ## Binaries
 
 Download win32 binaries at:

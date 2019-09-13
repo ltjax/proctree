@@ -30,4 +30,6 @@ target_link_libraries(${TARGET_NAME}
   PUBLIC CONAN_PKG::sdl2
   PUBLIC CONAN_PKG::glm
   PUBLIC CONAN_PKG::glew
-  PUBLIC ${OPENGL_LIBRARY})
+  PUBLIC CONAN_PKG::nativefiledialog-extended
+  PUBLIC CONAN_PKG::boost_filesystem
+  PUBLIC OpenGL::GL)

@@ -25,6 +25,8 @@
 *
 */
 #include "happytree.h"
+#include <nfd/nfd.hpp>
+#include <boost/filesystem.hpp>
 
 char *gTwigTextureName[MAXTEXTURES];
 int gTwigTexture[MAXTEXTURES];
@@ -52,6 +54,7 @@ glm::mat4 mat_shadow;
 
 glm::vec3 gCamRotate = { 0, 0.2, 20 };
 
+GLuint gVAO = 0;
 GLuint gVertVBO = 0;
 GLuint gNormalVBO = 0;
 GLuint gUVVBO = 0;
@@ -106,11 +109,11 @@ void progress()
 	glClearColor(0, 0, 0, 1);
 	glColor3f(1, 1, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
-	glBegin(GL_TRIANGLES);
+	/*glBegin(GL_TRIANGLES);
 	glVertex2f(sin(f) * 0.1 + 0, cos(f) * 0.1 + 0); f += 3.14 * 4 / 3;
 	glVertex2f(sin(f) * 0.1 + 0, cos(f) * 0.1 + 0); f += 3.14 * 4 / 3;
 	glVertex2f(sin(f) * 0.1 + 0, cos(f) * 0.11 + 0);
-	glEnd();
+	glEnd();*/
 	SDL_GL_SwapWindow(gWindow);
 	
 }
@@ -399,7 +402,7 @@ void draw_imgui()
 		int i;
 		for (i = 0; i < 8; i++)
 		{
-			ImGui::Image((ImTextureID)tex_preset[i], previewsize);
+			ImGui::Image(reinterpret_cast<ImTextureID>(tex_preset[i]), previewsize);
 			char temp[80];
 			sprintf(temp, "Load preset %d", i + 1);
 			if (ImGui::Button(temp))
@@ -419,7 +422,7 @@ void draw_imgui()
 		int i;
 		for (i = 0; i < gTwigTextureCount; i++)
 		{
-			ImGui::Image((ImTextureID)gTwigTexture[i], previewsize);
+			ImGui::Image(reinterpret_cast<ImTextureID>(gTwigTexture[i]), previewsize);
 			if (ImGui::Button(gTwigTextureName[i]))
 			{
 				gTwigTextureIndex = i;
@@ -438,7 +441,7 @@ void draw_imgui()
 		int i;
 		for (i = 0; i < gTrunkTextureCount; i++)
 		{
-			ImGui::Image((ImTextureID)gTrunkTexture[i], previewsize);
+			ImGui::Image(reinterpret_cast<ImTextureID>(gTrunkTexture[i]), previewsize);
 			if (ImGui::Button(gTrunkTextureName[i]))
 			{
 				gTrunkTextureIndex = i;
@@ -670,10 +673,10 @@ char * mystrdup(char * src, int ofs)
 }
 
 
-int imageExists(char *aBaseFilename, int aTwig)
+int imageExists(char const* aBaseFilename, int aTwig)
 {
 	
-	char *ext[] = { "TGA", "PNG", "JPG", "JPEG", "BMP", "PSD", "GIF", "HDR", "PIC", "PPM", "PGM"};
+	char const *ext[] = { "TGA", "PNG", "JPG", "JPEG", "BMP", "PSD", "GIF", "HDR", "PIC", "PPM", "PGM"};
 	char temp[2048];
 	int i;
 	for (i = 0; i < sizeof(ext)/sizeof(char*); i++)
@@ -708,35 +711,18 @@ int imageExists(char *aBaseFilename, int aTwig)
 	return 0;
 }
 
-void findtextures(char *aBaseDir, int aTwig)
+void findtextures(boost::filesystem::path baseDir, int aTwig)
 {
-	WIN32_FIND_DATAA fdFile;
-	HANDLE h = NULL;
+  if (!exists(baseDir))
+    return;
 
-	char path[2048];
-	sprintf(path, "%s\\*.*", aBaseDir);
-
-	h = FindFirstFileA(path, &fdFile);
-
-	if (h == INVALID_HANDLE_VALUE)
-		return;
-
-	do
-	{
-		if (strcmp(fdFile.cFileName, ".") != 0 &&
-			strcmp(fdFile.cFileName, "..") != 0)
-		{
-			if (fdFile.dwFileAttributes &FILE_ATTRIBUTE_DIRECTORY)
-			{				
-				sprintf(path, "%s\\%s\\diffuse", aBaseDir, fdFile.cFileName);
-				imageExists(path, aTwig);
-			}
-		}
-	} 
-	while (FindNextFileA(h, &fdFile)); 
-
-	FindClose(h);
-
+  for (auto const& entry : boost::filesystem::directory_iterator(baseDir))
+  {
+    if (entry.status().type() == boost::filesystem::directory_file)
+    {
+      imageExists((baseDir/entry.path()/"diffuse").string().c_str(), aTwig);
+    }
+  }
 }
 
 
@@ -765,8 +751,8 @@ void initGraphicsAssets()
 	progress();
 	tex_preset[7] = load_texture("data/preset8.jpg");
 
-	findtextures("data\\twig", 1);
-	findtextures("data\\trunk", 0);
+	findtextures("data/twig", 1);
+	findtextures("data/trunk", 0);
 
 	// keep shader sources in memory in case we need to re-build them on resize
 	gBaseShader.init("data/base.vs", "data/base.fs");
@@ -789,6 +775,9 @@ int main(int argc, char** args)
 		SDL_Quit();
 		exit(0);
 	}
+
+    // initialize NFD
+    NFD::Guard nfdGuard;
 
 	initvideo(TITLE " - http://iki.fi/sol/", argc);
 	

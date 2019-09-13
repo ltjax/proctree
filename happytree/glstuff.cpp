@@ -31,6 +31,7 @@ void init_gl_resources()
 {
 	ImImpl_InitGL();
 
+	glGenVertexArrays(1, &gVAO);
 	gOldProp.mSeed = -1; // force regen
 	glGenBuffers(1, &gVertVBO);
 	glGenBuffers(1, &gNormalVBO);
@@ -71,8 +72,8 @@ void init_gl_resources()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	// create a framebuffer object for shadows
-	glGenFramebuffersEXT(1, &rb_shadowfbo);
-	glBindFramebufferEXT(GL_FRAMEBUFFER, rb_shadowfbo);
+	glGenFramebuffers(1, &rb_shadowfbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, rb_shadowfbo);
 
 	if (!rb_shadow)
 		glGenTextures(1, &rb_shadow);
@@ -212,6 +213,7 @@ void draw_floor(Shader &shader)
 
 	glBindTexture(GL_TEXTURE_2D, tex_floor);
 
+	glBindVertexArray(gVAO);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
@@ -238,6 +240,7 @@ void prep_draw_tree()
 	glDisable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
 
+	glBindVertexArray(gVAO);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
@@ -282,6 +285,7 @@ void prep_draw_twig()
 
 	//glDepthMask(GL_FALSE);
 
+	glBindVertexArray(gVAO);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
@@ -360,6 +364,7 @@ void shadowmap_debug()
 	glBindBuffer(GL_ARRAY_BUFFER, vbouv);
 	glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(float) * 2, uvcoords, GL_STATIC_DRAW);
 
+	glBindVertexArray(gVAO);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);

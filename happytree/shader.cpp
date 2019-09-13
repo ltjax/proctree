@@ -40,7 +40,7 @@ Shader::~Shader()
 	delete[] mVSSrc;
 }
 
-void Shader::init(char *aFilename_vs, char *aFilename_fs)
+void Shader::init(char const* aFilename_vs, char const* aFilename_fs)
 {
 	delete[] mVSSrc;
 	delete[] mFSSrc;
@@ -52,26 +52,42 @@ void Shader::build()
 {
 	char *vs_src_p[1] = { mVSSrc };
 	char *fs_src_p[1] = { mFSSrc };
+	int status = GL_FALSE;
 
 	int vs_obj = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vs_obj, 1, (const char**)vs_src_p, &mVSLen);
 	glCompileShader(vs_obj);
+  glGetShaderiv(vs_obj, GL_COMPILE_STATUS, &status);
+	if (status == GL_FALSE)
+	{
+		char temp[2048];
+		glGetShaderInfoLog(mShaderHandle, 2048, &status, temp);
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Shader compile failure", temp, gWindow);
+	}
 
+  status = GL_FALSE;
 	int fs_obj = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fs_obj, 1, (const char**)fs_src_p, &mFSLen);
 	glCompileShader(fs_obj);
+	glGetShaderiv(fs_obj, GL_COMPILE_STATUS, &status);
+	if (status == GL_FALSE)
+	{
+		char temp[2048];
+		glGetShaderInfoLog(mShaderHandle, 2048, &status, temp);
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Shader compile failure", temp, gWindow);
+	}
 
+	status = GL_FALSE;
 	mShaderHandle = glCreateProgram();
 	glAttachShader(mShaderHandle, vs_obj);
 	glAttachShader(mShaderHandle, fs_obj);
 	glLinkProgram(mShaderHandle);
-	int status;
 	glGetProgramiv(mShaderHandle, GL_LINK_STATUS, &status);
 	if (status == GL_FALSE)
 	{
 		char temp[2048];
 		glGetProgramInfoLog(mShaderHandle, 2048, &status, temp);
-		MessageBoxA(NULL, temp, "Shader link failure", MB_ICONERROR);
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Shader link failure", temp, gWindow);
 	}
 }
 
@@ -80,7 +96,7 @@ void Shader::use()
 	glUseProgram(mShaderHandle);
 }
 
-int Shader::uniformLocation(char *aName)
+int Shader::uniformLocation(char const* aName)
 {
 	return glGetUniformLocation(mShaderHandle, aName);
 }

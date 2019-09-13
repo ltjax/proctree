@@ -52,8 +52,8 @@ void initvideo(char const* title, int argc)
 
     // request OpenGL 3.3 context.
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
@@ -120,14 +120,14 @@ static unsigned char * do_loadtexture(const char * aFilename, int &aWidth, int &
 
 char * mystrdup(const char *aString)
 {
-	int len = strlen(aString);
+	auto len = strlen(aString);
 	char * d = new char[len+1];
 	memcpy(d, aString, len);
 	d[len] = 0;
 	return d;
 }
 
-GLuint load_texture(char * aFilename, int clamp)
+GLuint load_texture(char const* aFilename, int clamp)
 {
     // First check if we have loaded this texture already
 	int i, j, w, h, n;

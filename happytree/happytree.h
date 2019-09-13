@@ -25,7 +25,6 @@
 *
 */
 
-#include <Windows.h> // file i/o dialogs
 #include "toolkit.h"
 #include "SDL_syswm.h"
 #include "../proctree/proctree.h"
@@ -58,6 +57,7 @@ extern int gTrunkTextureIndex;
 extern int tex_twig, tex_trunk, tex_floor;
 extern int tex_preset[8];
 
+extern GLuint gVAO;
 extern GLuint gVertVBO;
 extern GLuint gNormalVBO;
 extern GLuint gUVVBO;
@@ -114,7 +114,7 @@ void export_obj(char *aFilename);
 void export_h(char *aFilename);
 void load_htr(char *aFilename);
 void save_htr(char *aFilename);
-char * loadfile(char *aFilename, int &aLen);
+char * loadfile(char const* aFilename, int &aLen);
 void init_gl_resources();
 void calc_shadowmatrix();
 void setup_shadow();
